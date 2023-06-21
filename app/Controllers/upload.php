@@ -2,11 +2,13 @@
 
 namespace App\Controllers;
 
+use CodeIgniter\API\ResponseTrait;
 use App\Models\ActivityModel;
 use App\Models\UploadedPhotoModel;
 use App\Models\DepartmentModel;
 class upload extends BaseController
 {
+    use ResponseTrait;
     protected $helpers = ['form'];
     
     public function checkAuth(){
@@ -15,7 +17,6 @@ class upload extends BaseController
 
     public function uploader()
     {
-        
         $session = session();
         $department = $session->get('dp_id');
         $data = [];
@@ -221,6 +222,26 @@ class upload extends BaseController
             return redirect('uploader');
         }
 
+    }
+
+    public function activity_delete() {
+        $id = $this->request->getPost('activity_id');
+        $data = [];
+        $session = session();
+        $department = $session->get('dp_id');
+
+        $db = \Config\Database::connect();
+        $builder = $db->table('activity');
+        $builder->where('dp_id',$department);
+        
+        if($builder->countAllResults()){
+            $builder->delete(['id' => $id]);
+            $data['status'] = true;
+            return $this->respond($data);
+        }else {
+            $data['status'] = false;
+            return $this->respond($data);
+        }
     }
 
     public function get_activity()

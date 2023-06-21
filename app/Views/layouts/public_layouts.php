@@ -22,8 +22,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;300&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="<?=base_url('/c3/c3.css') ?>">
    <!-- ICON NEEDS FONT AWESOME FOR CHEVRON UP ICON -->
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
 
     <link href="<?=base_url('/assets/css/carousel.css')?>" rel="stylesheet">
     <!-- Custom styles for this template -->
@@ -98,7 +100,7 @@
     <header>
         <nav class="navbar navbar-expand-md fixed-top bg-rid navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="<?php echo url_to('index')?>">
                     <img src="<?=base_url('/assets/rid_logo.png')?>" alt="" height="70px">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
@@ -108,8 +110,8 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">
-                                <h4>120 ปี สู่อนาคต สู่ทศวรรษใหม่ 13 มิถุนายน 2566</h4>
+                            <a class="nav-link active" aria-current="page" href="<?php echo url_to('index')?>">
+                                <h4>121 ปี สู่อนาคต สู่ทศวรรษใหม่ 13 มิถุนายน 2566</h4>
                             </a>
                         </li>
                     </ul>
@@ -117,12 +119,13 @@
                     <li class="nav-item">
                         <a class="nav-link " href="<?php echo url_to('index')?>">หน้าแรก</a>
                     </li>
+            
                     <?php if (session()->get('username')) : ?>
                         <a class="nav-link" href="<?php echo url_to('uploader') ?>">เพิ่มภาพกิจกรรม</a>
                         <?php endif; ?>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="#">คู่มือ</a>
+                        <a class="nav-link " href="<?php echo url_to('manual') ?>">คู่มือ</a>
                     </li>
                     <li class="nav-item">
                     <?php if (!session()->get('username')) : ?>
@@ -131,7 +134,7 @@
                     </li>
                     <li class="nav-item">
                         <?php if (!session()->get('username')) : ?>
-                        <a class="nav-link" href="<?php echo url_to('login') ?>">เข้าสู่ระบบ</a>
+                        <a class="nav-link" target="_121_login" href="<?php echo url_to('login') ?>">เข้าสู่ระบบ</a>
                         <?php else :?> 
                             <a class="nav-link active" href="<?php echo url_to('logout') ?>">ออกจากระบบ</a>
                         <?php endif; ?>
@@ -152,7 +155,7 @@
     <footer class="container">
         <!-- Return to Top -->
         <a href="javascript:" id="return-to-top"><i class="icon-chevron-up"></i></a>
-        <p class="float-end"><a class="text-info" href="https://infgis.rid.go.th/">พัฒนาโดย ส่วนระบบสารสนเทศและภูมิสารสนเทศ ศูนย์เทคโนโลยีสารสนเทศและการสื่อสาร</a></p>
+        <p class="float-end"><a class="text-info" style="text-decoration: none;" href="#">พัฒนาโดย ส่วนระบบสารสนเทศและภูมิสารสนเทศ ศูนย์เทคโนโลยีสารสนเทศและการสื่อสาร ติดต่อเจ้าหน้าที่ email: nattiruj.k@gmail.com หมายเลขภายใน 2777</a></p>
         <p><span>สงวนลิขสิทธิ์ &copy; <?= date('Y') + 543 ?> กรมชลประทาน</span></p>
     </footer>
 
@@ -160,7 +163,9 @@
     <script src="<?=base_url('/assets/js/jquery-3.7.0.min.js')?>" ></script>
     <script src="<?=base_url('/assets/js/bootstrap.bundle.min.js')?>" ></script>
     <script src="<?=base_url('/assets/js/select2.full.min.js')?>" ></script>
-
+    <!-- Load d3.js and c3.js -->
+    <script src="<?=base_url('/c3/d3.v5.min.js') ?>" charset="utf-8"></script>
+    <script src="<?=base_url('/c3/c3.min.js') ?>"></script>
 
     <script>
         // ===== Scroll to Top ====

@@ -1,4 +1,4 @@
-<?= $this->extend('layouts\public_layouts') ?>
+<?= $this->extend('layouts/public_layouts') ?>
 
 <?= $this->section('css') ?>
 <style>
@@ -29,13 +29,13 @@
                             <option></option>
                         </select>
                     </div>
-                    <div class="md-3 col-6">
+                    <!-- <div class="md-3 col-6">
                         <label for="department_id2" class="form-label">โครงการฯ </label>
                         <select name="department_id2" class="form-select float-end" id="department_id2"
                             data-placeholder="เลือก">
                             <option></option>
                         </select>
-                    </div>
+                    </div> -->
 
                     <div class="mb-3 col-6">
                         <label for="email" class="form-label">Email Address</label>

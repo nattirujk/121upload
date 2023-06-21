@@ -1,4 +1,4 @@
-<?= $this->extend('layouts\public_layouts') ?>
+<?= $this->extend('layouts/public_layouts') ?>
 
 <?= $this->section('css') ?>
     <style>
@@ -89,41 +89,61 @@
         .img-thumbnail {
             max-height: 350px;
         }
+        .head-divider {
+            margin: 2rem 0; /* Space out the Bootstrap <hr> more */
+        }
     </style>
     <?= $this->endSection() ?>
     
 <?= $this->section('content') ?>
+<?php //dd( count($org['activity']) < 1 ); ?>
     <div class="container">
         <!-- START THE FEATURETTES -->
-        <hr class="featurette-divider">
+        <hr class="head-divider">
         <div class="row">
+            <div class="col-6  justify-content-start">
+                <h6 class="text text-info">สถิติจำนวนการเพิ่มกิจกรรม</h6><div id="chart"></div>
+            </div>
+           
+            <div class="col-6 justify-content-end text-center">
+                <h6 class="text text-info">จำนวน สำนัก/กอง ที่นำเข้ากิจกรรม</h6> 
+                <a href="<?=url_to('index_act_all')?>"><p class="text text-success " id="dp_id_count"></p></a>
+                <h6 class="text text-info">จำนวนสังกัดที่ลงทะเบียน</h6> 
+                <p class="text text-success " id="dp_id_account"></p>
+                
+            </div>
+        </div>
+       
+
+        <div class="row mt-3">
             <div class="col-md-12">
                 <form action="<?= url_to('show') ?>" method="GET" name="frm_select_org" id="frm_select_org" class="row justify-content-end">
-                    <div class="col-3"></div>
-                    <div class="col-4">
+                
+                    <div class="col-md-6 col-sm-12 col-xs-12  justify-content-end">
                         <select name="organize_id" class="form-select float-end" id="organize_id" data-placeholder="เลือก">
                             <option></option>
                         </select>
                     </div>
-                    <div class="col-4">
+                    <!-- <div class="col-4">
                         <select name="organize_pid" id="organize_pid" class="form-select float-end"
                             data-placeholder="เลือก">
                             <option></option>
                         </select>
-                    </div>
-                    <div class="col-1">
+                    </div> -->
+                    <div class="col-md-1 col-xs-2">
                         <button type="submit" class="btn btn-primary float-end"> เลือก</button>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-end">
+                        <div class="form-check form-switch p-2 m-2">
+                            <input class="form-check-input" type="checkbox" id="sw-a4">
+                            <label class="form-check-label" for="sw-a4">A4</label>
+                        </div>
+                        <button type="button" class="btn btn-info p-2 m-2" onclick="printDiv('printableArea')"><i class="icon-print"></i> ปริ้น</button>
                     </div>
                 </form>
 
             </div>
-            <div class="col-md-12 d-flex justify-content-end">
-                <div class="form-check form-switch p-2 m-2">
-                    <input class="form-check-input" type="checkbox" id="sw-a4">
-                    <label class="form-check-label" for="sw-a4">A4</label>
-                </div>
-                <button type="button" class="btn btn-info p-2 m-2" onclick="printDiv('printableArea')"><i class="icon-print"></i> ปริ้น</button>
-            </div>
+            
 
         </div>
 
@@ -175,7 +195,9 @@
                         <div class="pagebreak"> </div>
                     </page>
                     <?php endforeach; ?>
-
+                    <?php if (count($org['activity']) < 1) :?>
+                        <p class="text text-mute text-center" >ไม่พบข้อมูล</p>
+                    <?php endif ;?>
                 <?php endif;?>
             </div>
         </div>
@@ -208,29 +230,29 @@
             placeholder: $(this).data('placeholder'),
         });
 
-        $("#organize_id").on('select2:select', function(e) {
-            var id = e.params.data.id
-            // console.log(e.params.data.id)
-            $.ajax({
-                type: "GET",
-                url: "/org_level2/"+id,
-                dataType: "json",
-                success: function(response) {
-                    $("#organize_pid").val(null).trigger('change')
-                    $("#organize_pid option").remove();
-                    response.forEach(element => {
-                        $("#organize_pid").append('<option value="' + element.id +
-                            '" >' + element.department + '</option>');
-                    });
-                }
-            });
-        });
+        // $("#organize_id").on('select2:select', function(e) {
+        //     var id = e.params.data.id
+        //     // console.log(e.params.data.id)
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/org_level2/"+id,
+        //         dataType: "json",
+        //         success: function(response) {
+        //             $("#organize_pid").val(null).trigger('change')
+        //             $("#organize_pid option").remove();
+        //             response.forEach(element => {
+        //                 $("#organize_pid").append('<option value="' + element.id +
+        //                     '" >' + element.department + '</option>');
+        //             });
+        //         }
+        //     });
+        // });
 
-        $('#organize_pid').select2({
-            theme: "bootstrap-5",
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-        });
+        // $('#organize_pid').select2({
+        //     theme: "bootstrap-5",
+        //     width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        //     placeholder: $(this).data('placeholder'),
+        // });
 
         function printDiv(divName) {
             // var printContents = document.getElementById(divName).innerHTML;
@@ -259,5 +281,65 @@
                 $(".printableArea").removeClass("page-a4")
             }
         }).trigger("change");
+        var column = []
+        $.ajax({
+            type: "GET",
+            url: "<?= url_to('statistics')?>",
+            dataType: "JSON",
+            success: function (response) {
+                OnSuccess(response);
+                column.push(response)
+                $("#dp_id_count").html(response.department + " หน่วยงาน");
+                $("#dp_id_account").html(response.dp_id_account + " หน่วยงาน");
+
+            }
+        });
+
+        function OnSuccess(response) {
+            var chart = c3.generate({
+                    bindto: '#chart',
+                    data: {
+                        columns : [
+                                ['act1',response.act1],
+                                ['act2',response.act2],
+                                ['act3',response.act3],
+                                ['act4',response.act4],
+                                ['act5',response.act5],
+                                ['act6',response.act6],
+                                ['act7',response.act7],
+                        ],
+                        names: {
+                            act1: 'กิจกรรมที่ 1',
+                            act2: 'กิจกรรมที่ 2',
+                            act3: 'กิจกรรมที่ 3',
+                            act4: 'กิจกรรมที่ 4',
+                            act5: 'กิจกรรมที่ 5',
+                            act6: 'กิจกรรมที่ 6',
+                            act7: 'กิจกรรมที่ 7'
+                        },
+                        type: 'bar'
+                    },
+                    tooltip:{
+                        "grouped": false
+                    },  
+                    bar: {
+                        width: {
+                            ratio: 1 // this makes bar width 50% of length between ticks
+                        },
+                        space: 0.25
+                        // or
+                        //width: 100 // this makes bar width 100px
+                    },
+                    size: {
+                        height: 200
+                    }
+                });
+ 
+        }
+
+
+
+        
+
     </script>
     <?= $this->endSection() ?>

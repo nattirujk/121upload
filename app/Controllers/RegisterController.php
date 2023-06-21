@@ -25,23 +25,23 @@ class RegisterController extends BaseController
 
         
         $department = [];        
-        if ($this->request->getPost('department_id1')) {
-            $DepartmentModel = new DepartmentModel();
-            $department = $DepartmentModel->where('ref',$this->request->getPost('department_id1'))->first();
-            if (!empty($department)) {
-                $validation->setRules(
-                    [
-                    'department_id2' => 'required',
-                    ],
-                    [
-                        'department_id2' => [
-                            'required' => 'เลือก สังกัด',
-                        ]
-                    ]
-                        );
-            }
+        // if ($this->request->getPost('department_id1')) {
+        //     $DepartmentModel = new DepartmentModel();
+        //     $department = $DepartmentModel->where('ref',$this->request->getPost('department_id1'))->first();
+        //     if (!empty($department)) {
+        //         $validation->setRules(
+        //             [
+        //             'department_id2' => 'required',
+        //             ],
+        //             [
+        //                 'department_id2' => [
+        //                     'required' => 'เลือก สังกัด',
+        //                 ]
+        //             ]
+        //                 );
+        //     }
 
-        }
+        // }
 
         $validation->setRules(
             [
@@ -67,12 +67,12 @@ class RegisterController extends BaseController
         // echo var_dump($checkEmail) ;
         // exit;
         if ($checkEmail) {
-            $validation->setError('email', 'มีผู้ใช้ อีเมลนี่ไปแล้ว');
+            $validation->setError('email', 'มีผู้ใช้ อีเมลนี่ไปแล้ว หากต้องการเปลี่ยนแปลงกรุณาติดต่อเจ้าหน้าที่ email: nattiruj.k@gmail.com');
             return redirect()->back()->withInput();
         }
         $checkdp_id =  $UserModel->where('dp_id',$dp_id)->first();
         if ($checkdp_id) {
-            $validation->setError('org', 'สังกัดที่ท่านเลือก มีผู้ลงทะเบียนไปแล้ว');
+            $validation->setError('org', 'สังกัดที่ท่านเลือก มีผู้ลงทะเบียนไปแล้ว ด้วยอีเมลที่ชื่อ '.$checkdp_id['username'] . ' หากต้องการเปลี่ยนแปลงกรุณาติดต่อเจ้าหน้าที่ email: nattiruj.k@gmail.com' );
             return redirect()->back()->withInput();
         }
 

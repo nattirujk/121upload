@@ -33,6 +33,7 @@ $routes->setAutoRoute(false);
 // route since we don't have to scan directories.
 $routes->get('/', 'HomeController::home', ['as' => 'index']);
 $routes->get('/home', 'HomeController::home', ['as' => 'home']);
+$routes->get('/m', 'HomeController::manual' ,['as' => 'manual']);
 
 $routes->get('/org_level1', 'HomeController::org_level1', ['as' => 'org_level1']);
 $routes->get('/org_level2/(:num)', 'HomeController::org_level2/$1', ['as' => 'org_level2']);
@@ -49,9 +50,14 @@ $routes->get('/uploader', 'upload::uploader', ['filter' => 'authFilter']);
 $routes->post('/upload_pic', 'upload::upload_pic',['filter' => 'authFilter']);
 $routes->post('/get_activity', 'upload::get_activity', ['filter' => 'authFilter']);
 
-$routes->get('/register', 'Registercontroller::index' ,['filter' => 'guestFilter'],['as' => 'register']);
-$routes->post('/register', 'Registercontroller::index' ,['filter' => 'guestFilter'],['as' => 'register_save']);
+$routes->get('/register', 'RegisterController::index' ,['filter' => 'guestFilter'],['as' => 'register']);
+$routes->post('/register', 'RegisterController::index' ,['filter' => 'guestFilter'],['as' => 'register_save']);
 
+$routes->get('/statistics', 'HomeController::statistics' ,['as' => 'statistics']);
+
+$routes->post('/delete', 'upload::activity_delete', ['filter' => 'authFilter']);
+
+$routes->get('/stats', 'StatisticsController::index_act_all' ,['as' => 'index_act_all']);
 
 /*
  * --------------------------------------------------------------------

@@ -53,17 +53,18 @@
     <?php //echo '<pre>';?>
     <?php //print_r($this->data['uploaded']) ; ?>
     <?php //echo '<pre>';?>
+  
     <?php 
-        $filename1 = (isset($this->data['uploaded'][1]['shorting'])&& $this->data['uploaded'][1]['shorting'] == 1?  $this->data['uploaded'][1]['filename'] : "" ) ;  
+        $filename1 = (isset($this->data['uploaded'][1]['shorting'])&& $this->data['uploaded'][1]['shorting'] == 1?  substr($this->data['uploaded'][1]['filename'],20) : "" ) ;  
         $url1 = (isset($this->data['uploaded'][1]['shorting'])&& $this->data['uploaded'][1]['shorting'] == 1? base_url($this->data['uploaded'][1]['filepath'].'/'.$this->data['uploaded'][1]['filename'])  : "" ) ;
 
-        $filename2 = (isset($this->data['uploaded'][2]['shorting'])&& $this->data['uploaded'][2]['shorting'] == 2?  $this->data['uploaded'][2]['filename'] : "" ) ;  
+        $filename2 = (isset($this->data['uploaded'][2]['shorting'])&& $this->data['uploaded'][2]['shorting'] == 2?  substr($this->data['uploaded'][2]['filename'],20) : "" ) ;  
         $url2 = (isset($this->data['uploaded'][2]['shorting'])&& $this->data['uploaded'][2]['shorting'] == 2? base_url($this->data['uploaded'][2]['filepath'].'/'.$this->data['uploaded'][2]['filename'])  : "" ) ;
 
-        $filename3 = (isset($this->data['uploaded'][3]['shorting'])&& $this->data['uploaded'][3]['shorting'] == 3?  $this->data['uploaded'][3]['filename'] : "" ) ;  
+        $filename3 = (isset($this->data['uploaded'][3]['shorting'])&& $this->data['uploaded'][3]['shorting'] == 3?  substr($this->data['uploaded'][3]['filename'],20) : "" ) ;  
         $url3 = (isset($this->data['uploaded'][3]['shorting'])&& $this->data['uploaded'][3]['shorting'] == 3? base_url($this->data['uploaded'][3]['filepath'].'/'.$this->data['uploaded'][3]['filename'])  : "" ) ;
 
-        $filename4 = (isset($this->data['uploaded'][4]['shorting'])&& $this->data['uploaded'][4]['shorting'] == 4?  $this->data['uploaded'][4]['filename'] : "" ) ;  
+        $filename4 = (isset($this->data['uploaded'][4]['shorting'])&& $this->data['uploaded'][4]['shorting'] == 4?  substr($this->data['uploaded'][4]['filename'],20) : "" ) ;  
         $url4 = (isset($this->data['uploaded'][4]['shorting'])&& $this->data['uploaded'][4]['shorting'] == 4? base_url($this->data['uploaded'][4]['filepath'].'/'.$this->data['uploaded'][4]['filename'])  : "" ) ;
     ?>
 
@@ -107,13 +108,13 @@
             <div class="col-sm-6">
                 <select class="form-select select2" id="activity" style="width:100%" name="activity">
                     <option value="0">เลือก</option>
-                    <option value="1">กิจกรรมที่ 1</option>
-                    <option value="2">กิจกรรมที่ 2</option>
-                    <option value="3">กิจกรรมที่ 3</option>
-                    <option value="4">กิจกรรมที่ 4</option>
-                    <option value="5">กิจกรรมที่ 5</option>
-                    <option value="6">กิจกรรมที่ 6</option>
-                    <option value="7">กิจกรรมที่ 7</option>
+                    <option value="1">กิจกรรมที่ 1 การสักการะสิ่งศักดิ์สิทธิ์ และการจัดพิธีสงฆ์</option>
+                    <option value="2">กิจกรรมที่ 2 กิจกรรมบริจาคโลหิต</option>
+                    <option value="3">กิจกรรมที่ 3 การจัดกิจกรรมแสดงความยินดีจากหน่วยงานต่าง ๆ/การรับบริจาค</option>
+                    <option value="4">กิจกรรมที่ 4 พิธีเปิดงาน 121 ปี กรมชลประทาน</option>
+                    <option value="5">กิจกรรมที่ 5 กิจกรรมประกาศเกียรติคุณข้าราชการพลเรือนและลูกจ้างประจำดีเด่นกรมชลประทานประจำปี พ.ศ. 2565/กิจกรรมมอบโล่รางวัลการพัฒนาคุณภาพการบริหารจัดการโครงการส่งน้ำและบำรุงรักษา</option>
+                    <option value="6">กิจกรรมที่ 6 การบรรยายพิเศษจากวิทยากรผู้มีชื่อเสียง</option>
+                    <option value="7">กิจกรรมที่ 7 กิจกรรมอื่น ๆ</option>
                 </select>
             </div>
         </div>
@@ -170,10 +171,13 @@
         <div class="row">
             <span class="text-danger">&#42;แนะนำให้เป็นภาพแนวนอน และถ้าต้องการเปลี่ยนรูปภาพให้อัพโหลดทับไฟล์เดิมได้เลย</span>
         </div>
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-12 text-center">
-                <input type="submit" class="btn btn-primary" id="upload_btn" value="อัพโหลด" />
-                <a href="<?php echo base_url('/') ?>" role="button" class="btn btn-secondary">ย้อนกลับ</a>
+                <input type="submit" class="btn btn-primary mx-5" id="upload_btn" value="อัพโหลด" />
+                
+                <?php if (isset($this->data['activity'])) : ?>
+                    <button type="button" class="btn btn-danger" id="btn-delete-activity">ลบกิจกรรมนี้</button>
+                <?php endif; ?>
             </div>
         </div>
     </form>
@@ -255,5 +259,38 @@
             }
         });
 
+    });
+
+    $("#btn-delete-activity").on("click", function () {
+        let sweetConfig = {
+            icon: "question",
+            title: "ลบกิจกรรม",
+            text: "คุณต้องการลบกิจกรรมนี้ใช่หรือไม่",
+            showCancelButton: true,
+            cancelButtonText: "ไม่",
+            confirmButtonText: "ใช่",
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            position: "top",
+            reverseButtons: true,
+        }
+        Swal.fire(sweetConfig).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url('/delete'); ?>",
+                    data: {"activity_id" : "<?php echo (isset($this->data['activity']) ? $this->data['activity']['id'] : "") ;?>" },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.status === true ) {
+                            location.reload(); 
+                        }else {
+                            console.log(response)
+                        }
+                    }
+                });
+
+            }
+        });
     });
 </script>

@@ -51,7 +51,7 @@
                                 <a class="nav-link " href="<?php echo url_to('index')?>">หน้าแรก</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link " href="#">คู่มือ</a>
+                                <a class="nav-link " href="<?php echo url_to('manual') ?>">คู่มือ</a>
                             </li>
                             <li class="nav-item">
                             <?php if (!session()->get('username')) : ?>
@@ -62,7 +62,6 @@
                             </li>
                         </ul>
                     </div>
-                
             </div>
        
         </nav>

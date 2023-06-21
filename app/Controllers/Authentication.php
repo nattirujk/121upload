@@ -58,18 +58,26 @@ class Authentication extends BaseController
         $data = $user->select('username, password, dp_id')
             ->where('username', $username)
             ->first();
-
-        $authenticatePassword = password_verify($password, $data['password']);
-        // echo var_dump($authenticatePassword);
-        // exit;
-        if ($authenticatePassword === false) {
-
-            $this->validator->setError('password', 'ชื่อผู้ใช้ หรือรหัสผ่านผิดพลาด');
+        if ($data) {
+            $authenticatePassword = password_verify($password, $data['password']);
+            // echo var_dump($authenticatePassword);
+            // exit;
+            if ($authenticatePassword === false) {
+    
+                $this->validator->setError('password', 'ชื่อผู้ใช้ หรือรหัสผ่านผิดพลาด');
+                $data = ['error' => $this->validator];
+                session()->setFlashdata($data);
+    
+                return  redirect()->to(url_to('login'));
+            }
+        }else {
+            $this->validator->setError('password', 'ไม่พบผู้ใช้งาน กรุณาตรวจสอบอีเมลของท่านให้ถูกต้อง');
             $data = ['error' => $this->validator];
             session()->setFlashdata($data);
 
             return  redirect()->to(url_to('login'));
         }
+        
 
         if ($data != null) {
             $session_data = [

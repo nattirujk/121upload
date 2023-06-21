@@ -5,6 +5,7 @@ use CodeIgniter\API\ResponseTrait;
 use App\Models\DepartmentModel;
 use App\Models\ActivityModel;
 use App\Models\UploadedPhotoModel;
+
 class HomeController extends BaseController
 {
     use ResponseTrait;
@@ -17,6 +18,10 @@ class HomeController extends BaseController
 
     public function home() {
         return view('home');
+    }
+
+    public function manual() {
+        return view('manual');
     }
     
     public function org_level1() {
@@ -68,5 +73,40 @@ class HomeController extends BaseController
      
     }
 
+
+    public function statistics() {
+        $db = \Config\Database::connect();
+        $query   = $db->query('SELECT COUNT( DISTINCT dp_id ) AS department FROM activity');
+        $results = $query->getRow();
+        $data = array();
+        $ActivityModel= new ActivityModel();
+        $act1 = $ActivityModel->where('activity',1)->findAll();
+        $act2 = $ActivityModel->where('activity',2)->findAll();
+        $act3 = $ActivityModel->where('activity',3)->findAll();
+        $act4 = $ActivityModel->where('activity',4)->findAll();
+        $act5 = $ActivityModel->where('activity',5)->findAll();
+        $act6 = $ActivityModel->where('activity',6)->findAll();
+        $act7 = $ActivityModel->where('activity',7)->findAll();
+        $deparment = $ActivityModel->where('dp_id',7)->findAll();
+
+        $data['act1'] = count($act1);
+        $data['act2'] = count($act2);
+        $data['act3'] = count($act3);
+        $data['act4'] = count($act4);
+        $data['act5'] = count($act5);
+        $data['act6'] = count($act6);
+        $data['act7'] = count($act7);
+        $data['department'] = $results->department;
+
+        $builder = $db->table('user');
+        $data['dp_id_account'] = $builder->countAllResults();
+
+
+        // $queryAct1 = $db->query('select department.department FROM department WHERE department.id in ((SELECT  DISTINCT dp_id  AS id FROM activity where activity.activity = 1 )) ');
+
+        return $this->respond($data);
+    }
+
+  
  
 }
